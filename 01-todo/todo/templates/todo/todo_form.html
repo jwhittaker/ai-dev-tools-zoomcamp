@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% if form.instance.pk %}Edit Todo{% else %}New Todo{% endif %}</h1>
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+        <div style="margin-bottom: 1rem;">
+            <label for="id_title" style="display: block; margin-bottom: 0.5rem;">Title</label>
+            {{ form.title }}
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label for="id_due_date" style="display: block; margin-bottom: 0.5rem;">Due Date</label>
+            <input type="datetime-local" name="due_date" id="id_due_date"
+                value="{{ form.due_date.value|date:'Y-m-d\TH:i' }}"
+                style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 0.375rem;">
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label for="id_completed">
+                {{ form.completed }} Completed
+            </label>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{% url 'todo-list' %}" class="btn" style="background: var(--border); color: var(--text);">Cancel</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h1>My Todos</h1>
+    <a href="{% url 'todo-create' %}" class="btn btn-primary">+ New Todo</a>
+</div>
+
+<div class="card">
+    {% for todo in todos %}
+    <div class="todo-item">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span class="{% if todo.completed %}completed{% endif %}">
+                {{ todo.title }}
+            </span>
+            {% if todo.due_date %}
+            <span
+                style="font-size: 0.8rem; color: var(--text-light); background: var(--border); padding: 0.1rem 0.4rem; border-radius: 1rem;">
+                {{ todo.due_date|date:"M d, Y" }}
+            </span>
+            {% endif %}
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            {% if not todo.completed %}
+            <form action="{% url 'todo-complete' todo.pk %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit"
+                    style="background: none; border: none; color: var(--success); cursor: pointer; font-weight: 500; padding: 0;">Resolve</button>
+            </form>
+            <span style="color: var(--border);">|</span>
+            {% endif %}
+            <a href="{% url 'todo-update' todo.pk %}" style="color: var(--primary); text-decoration: none;">Edit</a>
+            <a href="{% url 'todo-delete' todo.pk %}" style="color: var(--danger); text-decoration: none;">Delete</a>
+        </div>
+    </div>
+    {% empty %}
+    <p style="text-align: center; color: var(--text-light);">No todos yet. Create one!</p>
+    {% endfor %}
+</div>
+{% endblock %}
